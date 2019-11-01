@@ -67,7 +67,11 @@ void wc(char* filename) {
     totalLines += lines;
     totalBytes += bytes;
 
-    printf("%d %d %d %s\n", lines, words, bytes, filename);
+
+    if (wantLines) printf("%d ", lines);
+    if (wantWords) printf("%d ", words);
+    if (wantBytes) printf("%d ", bytes);
+    printf("%s\n", filename);
 }
 
 
@@ -77,7 +81,7 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    if ((argc > 2) && (strstr(argv[1],"-") != NULL)) {
+    if ((argc > 2) && (strstr(argv[1],"-") != NULL) && ((strstr(argv[1],"l") != NULL) || (strstr(argv[1],"w") != NULL) || (strstr(argv[1],"c") != NULL))) {
             hasFlags = true;
             if (strstr(argv[1], "l") == NULL) {
                 wantLines = false;
@@ -89,6 +93,11 @@ int main(int argc, char *argv[]) {
                 wantBytes = false;
             }
 
+    } else {
+        if ((argc > 2) && (strstr(argv[1],"-") != NULL)) {
+            fprintf(stderr, "Incorrect arguments! Usage wc -lwc filename\n");
+            return 0;
+        }
     }
 
     for (int i = hasFlags ? 2 : 1; i < argc; i++) {
